@@ -79,6 +79,9 @@ class not_rel_mensaje extends _modelo_parent_sin_codigo {
             return $this->error->error(mensaje: 'Error al obtener mensaje',data:  $not_rel_mensaje);
         }
 
+        if($not_rel_mensaje->not_rel_mensaje_etapa=== 'ENVIADO'){
+            return $this->error->error(mensaje: 'Error el mensaje ha sido enviado',data:  $not_rel_mensaje);
+        }
 
         $mail = (new _mail())->envia(mensaje: $not_rel_mensaje);
         if(errores::$error){
