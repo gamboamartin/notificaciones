@@ -19,6 +19,7 @@ use gamboamartin\template\html;
 
 use PDO;
 use stdClass;
+use Throwable;
 
 class controlador_not_mensaje extends _ctl_parent_sin_codigo {
 
@@ -73,6 +74,34 @@ class controlador_not_mensaje extends _ctl_parent_sin_codigo {
 
 
         return $r_alta;
+    }
+
+    public function envia_mensaje(bool $header, bool $ws = false): array|string
+    {
+        $mail =(new not_mensaje(link: $this->link))->envia_mensaje(not_mensaje_id: $this->registro_id);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al enviar mensaje',data:  $mail, header: $header,ws:  $ws);
+        }
+
+        if($header){
+            $id_retorno = -1;
+            $this->retorno_base(registro_id:$id_retorno, result: $mail, siguiente_view: 'lista',
+                ws:  $ws,seccion_retorno: $this->seccion);
+        }
+        if($ws){
+            header('Content-Type: application/json');
+            try {
+                echo json_encode($mail, JSON_THROW_ON_ERROR);
+            }
+            catch (Throwable $e){
+                $error = (new errores())->error(mensaje: 'Error al maquetar JSON' , data: $e);
+                print_r($error);
+            }
+            exit;
+        }
+
+        return $mail;
+
     }
 
 
