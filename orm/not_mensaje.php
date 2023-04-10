@@ -3,11 +3,14 @@ namespace gamboamartin\notificaciones\models;
 
 use base\orm\_modelo_parent_sin_codigo;
 
+use base\orm\modelo;
 use gamboamartin\errores\errores;
+use gamboamartin\proceso\models\pr_proceso;
 use PDO;
 use stdClass;
 
 class not_mensaje extends _modelo_parent_sin_codigo {
+    private modelo $modelo_etapa;
     public function __construct(PDO $link){
         $tabla = 'not_mensaje';
         $columnas = array($tabla=>false,'not_emisor'=>$tabla);
@@ -18,6 +21,14 @@ class not_mensaje extends _modelo_parent_sin_codigo {
         $campos_view = array();
         $columnas_extra = array();
 
+        $not_mensaje_etapa = "(SELECT pr_etapa.descripcion FROM pr_etapa 
+            LEFT JOIN pr_etapa_proceso ON pr_etapa_proceso.pr_etapa_id = pr_etapa.id 
+            LEFT JOIN not_mensaje_etapa ON not_mensaje_etapa.pr_etapa_proceso_id = pr_etapa_proceso.id
+            WHERE not_mensaje_etapa.not_mensaje_id = not_mensaje.id ORDER BY not_mensaje_etapa.id DESC LIMIT 1)";
+
+
+        $columnas_extra['not_mensaje_etapa'] = "$not_mensaje_etapa";
+
         parent::__construct(link: $link, tabla: $tabla, campos_obligatorios: $campos_obligatorios,
             columnas: $columnas, campos_view: $campos_view, columnas_extra: $columnas_extra,
             no_duplicados: $no_duplicados, tipo_campos: array());
@@ -25,6 +36,8 @@ class not_mensaje extends _modelo_parent_sin_codigo {
         $this->NAMESPACE = __NAMESPACE__;
 
         $this->etiqueta = 'Mensajes';
+
+        $this->modelo_etapa = new not_mensaje_etapa(link: $this->link);
     }
 
     public function alta_bd(array $keys_integra_ds = array('descripcion')): array|stdClass
@@ -42,6 +55,13 @@ class not_mensaje extends _modelo_parent_sin_codigo {
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al dar de alta mensaje',data: $r_alta_bd);
         }
+
+        $r_alta_not_mensaje_etapa = (new pr_proceso(link: $this->link))->inserta_etapa(adm_accion: __FUNCTION__, fecha: '',
+            modelo: $this, modelo_etapa: $this->modelo_etapa, registro_id: $r_alta_bd->registro_id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al insertar etapa', data: $r_alta_not_mensaje_etapa);
+        }
+
         return $r_alta_bd;
     }
 
@@ -49,6 +69,12 @@ class not_mensaje extends _modelo_parent_sin_codigo {
         $not_mensaje = $this->registro(registro_id: $not_mensaje_id, retorno_obj: true);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener mensaje',data:  $not_mensaje);
+        }
+        /**
+         * REFACTORIZAR CON ATTR EN DATABASE
+         */
+        if($not_mensaje->not_mensaje_etapa=== 'ENVIADO'){
+            return $this->error->error(mensaje: 'Error el mensaje ha sido enviado',data:  $not_mensaje);
         }
 
         $filtro['not_mensaje.id'] = $not_mensaje_id;
@@ -70,6 +96,11 @@ class not_mensaje extends _modelo_parent_sin_codigo {
                 }
                 $envios[] = $mail;
             }
+        }
+        $r_alta_not_mensaje_etapa = (new pr_proceso(link: $this->link))->inserta_etapa(adm_accion: __FUNCTION__, fecha: '',
+            modelo: $this, modelo_etapa: $this->modelo_etapa, registro_id: $not_mensaje_id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al insertar etapa', data: $r_alta_not_mensaje_etapa);
         }
 
 

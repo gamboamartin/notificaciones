@@ -111,6 +111,7 @@ class controlador_not_mensaje extends _ctl_parent_sin_codigo {
         $columns["not_mensaje_id"]["titulo"] = "Id";
         $columns["not_emisor_email"]["titulo"] = "Email Emisor";
         $columns["not_mensaje_asunto"]["titulo"] = "Asunto";
+        $columns["not_mensaje_etapa"]["titulo"] = "Etapa";
 
         $filtro[] = array("not_mensaje.id");
         $filtro[] = array("not_emisor.email");
