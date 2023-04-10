@@ -13,14 +13,12 @@ use gamboamartin\errores\errores;
 use gamboamartin\notificaciones\html\not_mensaje_html;
 use gamboamartin\notificaciones\html\not_receptor_html;
 use gamboamartin\notificaciones\html\not_rel_mensaje_html;
-use gamboamartin\notificaciones\mail\_mail;
 use gamboamartin\notificaciones\models\not_rel_mensaje;
 use gamboamartin\system\_ctl_parent_sin_codigo;
 use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
 
 use PDO;
-use PHPMailer\PHPMailer\PHPMailer;
 use stdClass;
 use Throwable;
 
