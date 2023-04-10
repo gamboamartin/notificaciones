@@ -75,7 +75,7 @@ class controlador_not_rel_mensaje extends _ctl_parent_sin_codigo {
 
     public function envia_mensaje(bool $header, bool $ws = false): array|string
     {
-        $mail =(new not_rel_mensaje(link: $this->link))->envia_email(not_rel_mensaje_id: $this->registro_id);
+        $mail =(new not_rel_mensaje(link: $this->link))->envia_mensaje(not_rel_mensaje_id: $this->registro_id);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al enviar mensaje',data:  $mail, header: $header,ws:  $ws);
         }
@@ -110,6 +110,7 @@ class controlador_not_rel_mensaje extends _ctl_parent_sin_codigo {
         $columns["not_emisor_email"]["titulo"] = "Email Emisor";
         $columns["not_receptor_email"]["titulo"] = "Email Receptor";
         $columns["not_mensaje_asunto"]["titulo"] = "Asunto";
+        $columns["not_rel_mensaje_etapa"]["titulo"] = "Etapa";
 
         $filtro[] = array("not_rel_mensaje.id");
         $filtro[] = array("not_emisor.email");
