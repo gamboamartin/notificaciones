@@ -10,17 +10,19 @@ namespace gamboamartin\notificaciones\controllers;
 
 
 use gamboamartin\errores\errores;
-use gamboamartin\notificaciones\html\not_emisor_html;
 use gamboamartin\notificaciones\html\not_mensaje_html;
 use gamboamartin\notificaciones\html\not_receptor_html;
 use gamboamartin\notificaciones\html\not_rel_mensaje_html;
+use gamboamartin\notificaciones\mail\_mail;
 use gamboamartin\notificaciones\models\not_rel_mensaje;
 use gamboamartin\system\_ctl_parent_sin_codigo;
 use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
 
 use PDO;
+use PHPMailer\PHPMailer\PHPMailer;
 use stdClass;
+use Throwable;
 
 class controlador_not_rel_mensaje extends _ctl_parent_sin_codigo {
 
@@ -71,6 +73,35 @@ class controlador_not_rel_mensaje extends _ctl_parent_sin_codigo {
 
 
         return $r_alta;
+    }
+
+    public function envia_mensaje(bool $header, bool $ws = false): array|string
+    {
+        $mail =(new not_rel_mensaje(link: $this->link))->envia_email(not_rel_mensaje_id: $this->registro_id);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al enviar mensaje',data:  $mail, header: $header,ws:  $ws);
+        }
+
+
+        if($header){
+            $id_retorno = -1;
+            $this->retorno_base(registro_id:$id_retorno, result: $mail, siguiente_view: 'lista',
+                ws:  $ws,seccion_retorno: $this->seccion);
+        }
+        if($ws){
+            header('Content-Type: application/json');
+            try {
+                echo json_encode($mail, JSON_THROW_ON_ERROR);
+            }
+            catch (Throwable $e){
+                $error = (new errores())->error(mensaje: 'Error al maquetar JSON' , data: $e);
+                print_r($error);
+            }
+            exit;
+        }
+
+        return $mail;
+
     }
 
 

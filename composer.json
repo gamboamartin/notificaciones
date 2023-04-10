@@ -17,7 +17,8 @@
           "config\\": "config/",
           "gamboamartin\\notificaciones\\tests\\": "tests",
           "links\\": "links/",
-          "gamboamartin\\notificaciones\\html\\": "templates/directivas"
+          "gamboamartin\\notificaciones\\html\\": "templates/directivas",
+          "gamboamartin\\notificaciones\\mail\\": "src/"
         }
     },
     "require": {
@@ -29,7 +30,7 @@
         "ext-intl": "*",
         "ext-zip": "*",
       "ext-calendar": "*",
-        "phpmailer/phpmailer": "^6.3",
+        "phpmailer/phpmailer": "^6.8",
       "ext-gd": "*",
       "ext-exif": "*",
         "chillerlan/php-qrcode": "^4.3",

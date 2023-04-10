@@ -4,6 +4,7 @@ namespace gamboamartin\notificaciones\models;
 use base\orm\_modelo_parent_sin_codigo;
 
 use gamboamartin\errores\errores;
+use gamboamartin\notificaciones\mail\_mail;
 use PDO;
 use stdClass;
 
@@ -49,6 +50,20 @@ class not_rel_mensaje extends _modelo_parent_sin_codigo {
             return $this->error->error(mensaje: 'Error al dar de alta mensaje',data: $r_alta_bd);
         }
         return $r_alta_bd;
+    }
+
+    final public function envia_email(int $not_rel_mensaje_id){
+        $not_rel_mensaje = $this->registro(registro_id: $not_rel_mensaje_id, retorno_obj: true);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener mensaje',data:  $not_rel_mensaje);
+        }
+
+
+        $mail = (new _mail())->envia(mensaje: $not_rel_mensaje);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al enviar mensaje',data:  $mail);
+        }
+        return $mail;
     }
 
 
