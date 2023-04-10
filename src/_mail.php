@@ -5,7 +5,7 @@ use stdClass;
 use Throwable;
 
 class _mail{
-    final public function envia(stdClass $mensaje){
+    final public function envia(stdClass $mensaje, array $adjuntos = array()){
         try {
 
             $mail = new PHPMailer (true);
@@ -24,6 +24,13 @@ class _mail{
             $mail->AltBody = $mensaje->not_mensaje_mensaje;
             $mail->CharSet = 'UTF-8';
             $mail->Encoding = 'base64';
+
+            foreach ($adjuntos as $adjunto ){
+                $path =  $adjunto['doc_documento_ruta_absoluta'];
+                $name =  $adjunto['doc_documento_nombre'];
+                $mail->AddAttachment($path, $name);
+            }
+
             $mail->send();
 
 

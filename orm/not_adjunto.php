@@ -43,6 +43,11 @@ class not_adjunto extends _modelo_parent_sin_codigo {
             return $this->error->error(mensaje: 'Error al obtener doc_documento',data: $doc_documento);
         }
 
+        if(!file_exists($doc_documento['doc_documento_ruta_absoluta'])){
+            return $this->error->error(mensaje: 'Error el documento no existe',data: $doc_documento);
+        }
+
+
         if(!isset($this->registro['descripcion'])){
             $descripcion = $not_mensaje['not_emisor_email'].' '.$not_mensaje['not_mensaje_asunto'].' '.
                 $doc_documento['doc_documento_descripcion'].' '.date('YmdHis');

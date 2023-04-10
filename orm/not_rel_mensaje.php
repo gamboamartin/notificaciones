@@ -86,7 +86,15 @@ class not_rel_mensaje extends _modelo_parent_sin_codigo {
             return $this->error->error(mensaje: 'Error el mensaje ha sido enviado',data:  $not_rel_mensaje);
         }
 
-        $mail = (new _mail())->envia(mensaje: $not_rel_mensaje);
+        $filtro['not_mensaje.id'] = $not_rel_mensaje->not_mensaje_id;
+        $r_not_adjunto = (new not_adjunto(link: $this->link))->filtro_and(filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener adjuntos', data: $r_not_adjunto);
+        }
+
+        $adjuntos = $r_not_adjunto->registros;
+
+        $mail = (new _mail())->envia(mensaje: $not_rel_mensaje, adjuntos: $adjuntos);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al enviar mensaje',data:  $mail);
         }
