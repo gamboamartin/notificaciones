@@ -5,6 +5,12 @@ use stdClass;
 use Throwable;
 
 class _mail{
+    /**
+     * Envia un correo con adjuntos
+     * @param stdClass $mensaje
+     * @param array $adjuntos
+     * @return PHPMailer|void
+     */
     final public function envia(stdClass $mensaje, array $adjuntos = array()){
         try {
 
@@ -27,7 +33,7 @@ class _mail{
 
             foreach ($adjuntos as $adjunto ){
                 $path =  $adjunto['doc_documento_ruta_absoluta'];
-                $name =  $adjunto['doc_documento_descripcion'];
+                $name =  $adjunto['not_adjunto_descripcion'];
                 $mail->AddAttachment($path, $name);
             }
 
