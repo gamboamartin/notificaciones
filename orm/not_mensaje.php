@@ -65,6 +65,7 @@ class not_mensaje extends _modelo_parent_sin_codigo {
         return $r_alta_bd;
     }
 
+
     final public function envia_mensaje(int $not_mensaje_id){
         $not_mensaje = $this->registro(registro_id: $not_mensaje_id, retorno_obj: true);
         if(errores::$error){

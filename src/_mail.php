@@ -27,7 +27,7 @@ class _mail{
 
             foreach ($adjuntos as $adjunto ){
                 $path =  $adjunto['doc_documento_ruta_absoluta'];
-                $name =  $adjunto['doc_documento_nombre'];
+                $name =  $adjunto['doc_documento_descripcion'];
                 $mail->AddAttachment($path, $name);
             }
 
