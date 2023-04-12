@@ -100,7 +100,7 @@ class not_rel_mensaje extends _modelo_parent_sin_codigo {
         }
 
         $r_alta_not_rel_mensaje_etapa = (new pr_proceso(link: $this->link))->inserta_etapa(adm_accion: __FUNCTION__, fecha: '',
-            modelo: $this, modelo_etapa: $this->modelo_etapa, registro_id: $not_rel_mensaje_id);
+            modelo: $this, modelo_etapa: $this->modelo_etapa, registro_id: $not_rel_mensaje_id, valida_existencia_etapa: true);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al insertar etapa', data: $r_alta_not_rel_mensaje_etapa);
         }
