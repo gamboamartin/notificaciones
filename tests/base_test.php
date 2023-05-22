@@ -84,7 +84,25 @@ class base_test{
 
     public function del_not_mensaje_etapa(PDO $link): array
     {
+
+        $del = $this->del_not_rel_mensaje_etapa($link);
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+
+        }
+
         $del = $this->del($link, 'gamboamartin\\notificaciones\\models\\not_mensaje_etapa');
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+        return $del;
+    }
+
+    public function del_not_rel_mensaje_etapa(PDO $link): array
+    {
+
+
+        $del = $this->del($link, 'gamboamartin\\notificaciones\\models\\not_rel_mensaje_etapa');
         if(errores::$error){
             return (new errores())->error('Error al eliminar', $del);
         }
