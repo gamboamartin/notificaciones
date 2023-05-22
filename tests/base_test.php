@@ -1,5 +1,5 @@
 <?php
-namespace gamboamartin\facturacion\tests;
+namespace gamboamartin\notificaciones\tests;
 use base\orm\modelo_base;
 
 use gamboamartin\cat_sat\models\cat_sat_factor;
