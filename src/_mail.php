@@ -19,7 +19,7 @@ class _mail{
             $mail->SMTPAuth = true;
             $mail->Host = $mensaje->not_emisor_host;
             $mail->Port = $mensaje->not_emisor_port;
-            $mail->Username = $mensaje->not_emisor_email;
+            $mail->Username = $mensaje->not_emisor_user_name;
             $mail->Password = $mensaje->not_emisor_password;
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
             $mail->setFrom($mensaje->not_emisor_email, $mensaje->not_emisor_user_name);
