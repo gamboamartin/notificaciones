@@ -22,7 +22,7 @@ class _mail{
             $mail->Username = $mensaje->not_emisor_user_name;
             $mail->Password = $mensaje->not_emisor_password;
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-            $mail->setFrom($mensaje->not_emisor_email, $mensaje->not_emisor_user_name);
+            $mail->setFrom($mensaje->not_emisor_email, $mensaje->not_emisor_email);
             $mail->addAddress($mensaje->not_receptor_email, $mensaje->not_receptor_alias);
             $mail->isHTML(true);
             $mail->Subject = $mensaje->not_mensaje_asunto;
