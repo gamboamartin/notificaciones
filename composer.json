@@ -56,7 +56,7 @@
         "gamboa.martin/template_1": "^11.0.0",
         "gamboa.martin/template": "^8.0.0",
         "gamboa.martin/services": "^8.0.0",
-        "gamboa.martin/proceso": "^9.0.0",
+        "gamboa.martin/proceso": "^10.0.0",
         "gamboa.martin/acl": "^10.0.0",
       "ext-openssl": "*"
     },
