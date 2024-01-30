@@ -73,6 +73,11 @@ class controlador_not_adjunto extends _ctl_parent_sin_codigo {
     }
 
 
+    /**
+     * Initializes and returns a DataTable object.
+     *
+     * @return stdClass The created DataTable object with properties columns and filtro.
+     */
     final public function init_datatable(): stdClass
     {
 
