@@ -18,6 +18,7 @@
           "gamboamartin\\notificaciones\\tests\\": "tests",
           "links\\": "links/",
           "gamboamartin\\notificaciones\\html\\": "templates/directivas",
+          "gamboamartin\\notificaciones\\instalacion\\": "instalacion/",
           "gamboamartin\\notificaciones\\mail\\": "src/"
         }
     },
