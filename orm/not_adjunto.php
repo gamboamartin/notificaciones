@@ -50,6 +50,7 @@ class not_adjunto extends _modelo_parent_sin_codigo {
         if(!isset($this->registro['descripcion'])){
             $descripcion = $not_mensaje['not_emisor_email'].' '.$not_mensaje['not_mensaje_asunto'].' '.
                 $doc_documento['doc_documento_descripcion'].' '.date('YmdHis');
+            $descripcion.= mt_rand(1000,9999);
             $this->registro['descripcion'] = $descripcion;
         }
         if(!isset($this->registro['codigo'])){
