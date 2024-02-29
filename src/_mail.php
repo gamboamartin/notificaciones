@@ -33,7 +33,7 @@ class _mail{
 
             foreach ($adjuntos as $adjunto ){
                 $path =  $adjunto['doc_documento_ruta_absoluta'];
-                $name =  $adjunto['not_adjunto_descripcion'];
+                $name =  $adjunto['not_adjunto_name_out'];
                 $mail->AddAttachment($path, $name);
             }
 
