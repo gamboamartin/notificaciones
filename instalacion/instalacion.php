@@ -9,6 +9,31 @@ use stdClass;
 class instalacion
 {
 
+    private function not_adjunto(PDO $link): array|stdClass
+    {
+        $init = (new _instalacion(link: $link));
+
+        $create = $init->create_table_new(table: __FUNCTION__);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al create', data:  $create);
+        }
+
+        $foraneas = array();
+        $foraneas['not_mensaje_id'] = new stdClass();
+        $foraneas['doc_documento_id'] = new stdClass();
+
+
+        $foraneas_r = $init->foraneas(foraneas: $foraneas,table:  __FUNCTION__);
+
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al ajustar foranea', data:  $foraneas_r);
+        }
+
+
+        return $result;
+
+    }
+
     private function not_emisor(PDO $link): array|stdClass
     {
         $result = new stdClass();
@@ -250,6 +275,15 @@ class instalacion
         }
 
         $result->not_mensaje = $not_mensaje;
+
+
+        $not_adjunto = $this->not_adjunto(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al ajustar not_adjunto', data:  $not_adjunto);
+        }
+
+        $result->not_adjunto = $not_adjunto;
+
 
         $not_mensaje_etapa = $this->not_mensaje_etapa(link: $link);
         if(errores::$error){
