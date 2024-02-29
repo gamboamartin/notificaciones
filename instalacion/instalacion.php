@@ -30,6 +30,22 @@ class instalacion
         }
 
 
+        $campos = new stdClass();
+
+        $campos->name_out = new stdClass();
+        $campos->name_out->default = 'SN';
+
+
+        $campos_r = $init->add_columns(campos: $campos,table:  __FUNCTION__);
+
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al ajustar foranea', data:  $campos_r);
+        }
+
+        $result = new stdClass();
+
+        $result->campos_r = $campos_r;
+
         return $result;
 
     }

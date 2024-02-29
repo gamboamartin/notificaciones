@@ -53,6 +53,9 @@ class not_adjunto extends _modelo_parent_sin_codigo {
             $descripcion.= mt_rand(1000,9999);
             $this->registro['descripcion'] = $descripcion;
         }
+        if(!isset($this->registro['name_out'])){
+            $this->registro['name_out'] = $this->registro['descripcion'];
+        }
         if(!isset($this->registro['codigo'])){
             $codigo = mt_rand(10,99).mt_rand(10,99).mt_rand(10,99).mt_rand(10,99).mt_rand(10,99).mt_rand(10,99);
             $codigo .= mt_rand(10,99).mt_rand(10,99).mt_rand(10,99).mt_rand(10,99).mt_rand(10,99).mt_rand(10,99);
