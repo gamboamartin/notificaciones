@@ -1,6 +1,7 @@
 <?php
 namespace gamboamartin\notificaciones\instalacion;
 
+use gamboamartin\administrador\instalacion\_adm;
 use gamboamartin\administrador\models\_instalacion;
 use gamboamartin\errores\errores;
 use PDO;
@@ -45,6 +46,23 @@ class instalacion
         $result = new stdClass();
 
         $result->campos_r = $campos_r;
+
+        $adm_menu_descripcion = 'Documentos';
+        $adm_sistema_descripcion = 'notificaciones';
+        $etiqueta_label = 'Adjuntos';
+        $adm_seccion_pertenece_descripcion = 'not_adjunto';
+        $adm_namespace_name = 'gamboamartin/notificaciones';
+        $adm_namespace_descripcion = 'gamboa.martin/notificaciones';
+
+        $acl = (new _adm())->integra_acl(adm_menu_descripcion: $adm_menu_descripcion,
+            adm_namespace_name: $adm_namespace_name, adm_namespace_descripcion: $adm_namespace_descripcion,
+            adm_seccion_descripcion: __FUNCTION__,
+            adm_seccion_pertenece_descripcion: $adm_seccion_pertenece_descripcion,
+            adm_sistema_descripcion: $adm_sistema_descripcion,
+            etiqueta_label: $etiqueta_label, link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al obtener acl', data:  $acl);
+        }
 
         return $result;
 
