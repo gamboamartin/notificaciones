@@ -10,6 +10,25 @@ use stdClass;
 class instalacion
 {
 
+    /**
+     * @param PDO $link
+     * @return array|stdClass
+     */
+    private function _add_not_tipo_medio(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+        $init = (new _instalacion(link: $link));
+
+        $create = $init->create_table_new(table: 'not_tipo_medio');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+        $out->create = $create;
+
+
+        return $out;
+    }
+
     private function not_adjunto(PDO $link): array|stdClass
     {
         $init = (new _instalacion(link: $link));
@@ -284,10 +303,47 @@ class instalacion
 
     }
 
+    private function not_tipo_medio(PDO $link): array|stdClass
+    {
+        $result = new stdClass();
+
+        $create = $this->_add_not_tipo_medio(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al create', data:  $create);
+        }
+
+        $adm_menu_descripcion = 'Notificaciones';
+        $adm_sistema_descripcion = 'notificaciones';
+        $etiqueta_label = 'Tipos de Medios';
+        $adm_seccion_pertenece_descripcion = 'not_tipo_medio';
+        $adm_namespace_descripcion = 'gamboa.martin/notificaciones';
+        $adm_namespace_name = 'gamboamartin/notificaciones';
+
+        $acl = (new _adm())->integra_acl(adm_menu_descripcion: $adm_menu_descripcion,
+            adm_namespace_name: $adm_namespace_name, adm_namespace_descripcion: $adm_namespace_descripcion,
+            adm_seccion_descripcion: __FUNCTION__, adm_seccion_pertenece_descripcion: $adm_seccion_pertenece_descripcion,
+            adm_sistema_descripcion: $adm_sistema_descripcion, etiqueta_label: $etiqueta_label, link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al obtener acl', data:  $acl);
+        }
+
+
+        $result->create = $create;
+
+
+        return $result;
+
+    }
+
     final public function instala(PDO $link): array|stdClass
     {
 
         $result = new stdClass();
+
+        $not_tipo_medio = $this->not_tipo_medio(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al ajustar not_tipo_medio', data:  $not_tipo_medio);
+        }
 
         $not_emisor = $this->not_emisor(link: $link);
         if(errores::$error){
