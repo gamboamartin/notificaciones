@@ -3,6 +3,7 @@ namespace gamboamartin\notificaciones\instalacion;
 
 use gamboamartin\administrador\instalacion\_adm;
 use gamboamartin\administrador\models\_instalacion;
+use gamboamartin\administrador\models\adm_sistema;
 use gamboamartin\errores\errores;
 use PDO;
 use stdClass;
@@ -396,6 +397,8 @@ class instalacion
         }
 
         $result->not_rel_mensaje_etapa = $not_rel_mensaje_etapa;
+
+
 
 
         return $result;
