@@ -6,6 +6,7 @@ use gamboamartin\administrador\models\_instalacion;
 use gamboamartin\administrador\models\adm_accion;
 use gamboamartin\administrador\models\adm_accion_basica;
 use gamboamartin\administrador\models\adm_seccion;
+use gamboamartin\administrador\models\adm_seccion_pertenece;
 use gamboamartin\administrador\models\adm_sistema;
 use gamboamartin\errores\errores;
 use PDO;
@@ -446,6 +447,47 @@ class instalacion
         }
 
         $result->not_rel_mensaje_etapa = $not_rel_mensaje_etapa;
+
+        $secciones_acl[] = 'adm_seccion';
+        $secciones_acl[] = 'adm_accion';
+        $secciones_acl[] = 'adm_accion_grupo';
+        $secciones_acl[] = 'adm_grupo';
+        $secciones_acl[] = 'adm_menu';
+        $secciones_acl[] = 'adm_usuario';
+        $secciones_acl[] = 'adm_sistema';
+        $secciones_acl[] = 'adm_seccion_pertenece';
+
+        $r_adm_sistema = (new adm_sistema(link: $link))->get_data_descripcion(dato: 'notificaciones');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al obtener sistema', data:  $r_adm_sistema);
+        }
+
+        foreach ($secciones_acl as $adm_seccion_descripcion){
+            $filtro = array();
+            $filtro['adm_sistema.descripcion'] = 'notificaciones';
+            $filtro['adm_seccion.descripcion'] = $adm_seccion_descripcion;
+            $existe = (new adm_seccion_pertenece(link: $link))->existe(filtro: $filtro);
+            if(errores::$error){
+                return (new errores())->error(mensaje: 'Error al validar si existe seccion', data:  $existe);
+            }
+
+            if(!$existe){
+
+                $adm_seccion_id = (new adm_seccion(link: $link))->adm_seccion_id(descripcion: $adm_seccion_descripcion);
+                if(errores::$error){
+                    return (new errores())->error(mensaje: 'Error al obtener adm_seccion_id', data:  $existe);
+                }
+
+                $adm_seccion_pertenece_ins['adm_sistema_id'] = $r_adm_sistema->registros[0]['adm_sistema_id'];
+                $adm_seccion_pertenece_ins['adm_seccion_id'] = $adm_seccion_id;
+
+                $alta_seccion_pertenece = (new adm_seccion_pertenece(link: $link))->alta_registro(registro: $adm_seccion_pertenece_ins);
+                if(errores::$error){
+                    return (new errores())->error(mensaje: 'Error al insertar alta_seccion_pertenece', data:  $alta_seccion_pertenece);
+                }
+
+            }
+        }
 
 
 
