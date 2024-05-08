@@ -3,6 +3,9 @@ namespace gamboamartin\notificaciones\instalacion;
 
 use gamboamartin\administrador\instalacion\_adm;
 use gamboamartin\administrador\models\_instalacion;
+use gamboamartin\administrador\models\adm_accion;
+use gamboamartin\administrador\models\adm_accion_basica;
+use gamboamartin\administrador\models\adm_seccion;
 use gamboamartin\administrador\models\adm_sistema;
 use gamboamartin\errores\errores;
 use PDO;
@@ -327,6 +330,52 @@ class instalacion
         if(errores::$error){
             return (new errores())->error(mensaje: 'Error al obtener acl', data:  $acl);
         }
+
+        $acciones_basicas = (new adm_accion_basica(link: $link))->registros();
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al obtener acciones basicas', data:  $acciones_basicas);
+        }
+
+        $adm_seccion_id = (new adm_seccion(link: $link))->adm_seccion_id(descripcion: __FUNCTION__);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al obtener seccion', data:  $adm_seccion_id);
+        }
+
+        foreach ($acciones_basicas as $accion_basica) {
+            $filtro = array();
+            $filtro['adm_seccion.id'] = $adm_seccion_id;
+            $filtro['adm_accion.descripcion'] = $accion_basica['adm_accion_basica_descripcion'];
+            $existe = (new adm_accion(link: $link))->existe(filtro: $filtro);
+            if(errores::$error){
+                return (new errores())->error(mensaje: 'Error al validar si existe accion', data:  $existe);
+            }
+            if(!$existe){
+                $adm_accion_ins['descripcion'] = $accion_basica['adm_accion_basica_descripcion'];
+                $adm_accion_ins['etiqueta_label'] = $accion_basica['adm_accion_basica_etiqueta_label'];
+                $adm_accion_ins['adm_seccion_id'] = $adm_seccion_id;
+                $adm_accion_ins['status'] = 'activo';
+                $adm_accion_ins['icono'] = $accion_basica['adm_accion_basica_icono'];
+                $adm_accion_ins['visible'] = $accion_basica['adm_accion_basica_visible'];
+                $adm_accion_ins['inicio'] = $accion_basica['adm_accion_basica_inicio'];
+                $adm_accion_ins['lista'] = $accion_basica['adm_accion_basica_lista'];
+                $adm_accion_ins['seguridad'] = $accion_basica['adm_accion_basica_seguridad'];
+                $adm_accion_ins['es_modal'] = $accion_basica['adm_accion_basica_es_modal'];
+                $adm_accion_ins['es_view'] = $accion_basica['adm_accion_basica_es_view'];
+                $adm_accion_ins['titulo'] = $accion_basica['adm_accion_basica_titulo'];
+                $adm_accion_ins['css'] = $accion_basica['adm_accion_basica_css'];
+                $adm_accion_ins['es_status'] = $accion_basica['adm_accion_basica_es_status'];
+                $adm_accion_ins['es_lista'] = $accion_basica['adm_accion_basica_es_lista'];
+                $adm_accion_ins['muestra_icono_btn'] = $accion_basica['adm_accion_basica_muestra_icono_btn'];
+                $adm_accion_ins['muestra_titulo_btn'] = $accion_basica['adm_accion_basica_muestra_titulo_btn'];
+
+                $alta = (new adm_accion(link: $link))->alta_registro(registro: $adm_accion_ins);
+                if(errores::$error){
+                    return (new errores())->error(mensaje: 'Error al insertar accion', data:  $alta);
+                }
+            }
+
+        }
+
 
 
         $result->create = $create;
