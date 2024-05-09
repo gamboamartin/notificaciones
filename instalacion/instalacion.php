@@ -475,7 +475,7 @@ class instalacion
 
                 $adm_seccion_id = (new adm_seccion(link: $link))->adm_seccion_id(descripcion: $adm_seccion_descripcion);
                 if(errores::$error){
-                    return (new errores())->error(mensaje: 'Error al obtener adm_seccion_id', data:  $existe);
+                    return (new errores())->error(mensaje: 'Error al obtener adm_seccion_id', data:  $adm_seccion_id);
                 }
 
                 $adm_seccion_pertenece_ins['adm_sistema_id'] = $r_adm_sistema->registros[0]['adm_sistema_id'];

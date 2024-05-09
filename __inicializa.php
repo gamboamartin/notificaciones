@@ -17,7 +17,9 @@ $administrador = new gamboamartin\administrador\instalacion\instalacion();
 
 $instala = $administrador->instala(link: $link);
 if(errores::$error){
-    $link->rollBack();
+    if($link->inTransaction()) {
+        $link->rollBack();
+    }
     $error = (new errores())->error(mensaje: 'Error al instalar administrador', data: $instala);
     print_r($error);
     exit;
@@ -28,7 +30,9 @@ $documento = new gamboamartin\documento\instalacion\instalacion();
 
 $instala = $documento->instala(link: $link);
 if(errores::$error){
-    $link->rollBack();
+    if($link->inTransaction()) {
+        $link->rollBack();
+    }
     $error = (new errores())->error(mensaje: 'Error al instalar documento', data: $instala);
     print_r($error);
     exit;
@@ -41,7 +45,9 @@ $notificaciones = new gamboamartin\notificaciones\instalacion\instalacion();
 
 $instala = $notificaciones->instala(link: $link);
 if(errores::$error){
-    $link->rollBack();
+    if($link->inTransaction()) {
+        $link->rollBack();
+    }
     $error = (new errores())->error(mensaje: 'Error al instalar notificaciones', data: $instala);
     print_r($error);
     exit;
@@ -49,6 +55,8 @@ if(errores::$error){
 
 print_r($instala);
 
-$link->commit();
+if($link->inTransaction()) {
+    $link->commit();
+}
 
 
