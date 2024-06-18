@@ -34,6 +34,37 @@ class instalacion
         return $out;
     }
 
+    private function adm_usuario(PDO $link): array|stdClass
+    {
+
+        $adm_menu_descripcion = 'ACL';
+        $adm_sistema_descripcion = 'notificaciones';
+        $etiqueta_label = 'Usuarios';
+        $adm_seccion_pertenece_descripcion = __FUNCTION__;
+        $adm_namespace_name = 'gamboamartin/notificaciones';
+        $adm_namespace_descripcion = 'gamboa.martin/notificaciones';
+
+        $adm_acciones_basicas = (new _adm())->acl_base(adm_menu_descripcion: $adm_menu_descripcion,
+            adm_namespace_descripcion:  $adm_namespace_descripcion,adm_namespace_name:  $adm_namespace_name,
+            adm_seccion_descripcion: __FUNCTION__,
+            adm_seccion_pertenece_descripcion:  $adm_seccion_pertenece_descripcion,
+            adm_sistema_descripcion:  $adm_sistema_descripcion, etiqueta_label: $etiqueta_label,link:  $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al obtener acciones basicas', data:  $adm_acciones_basicas);
+        }
+
+        $alta_accion = (new _adm())->inserta_accion_base(adm_accion_descripcion: 'recupera_contrasena',
+            adm_seccion_descripcion:  __FUNCTION__, es_view: 'inactivo', icono: 'bi bi-arrow-up-short',
+            link:  $link, lista:  'activo',titulo:  'Recupera Contraseña');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al insertar accion',data:  $alta_accion);
+        }
+
+        return $adm_acciones_basicas;
+
+    }
+
+
     private function not_adjunto(PDO $link): array|stdClass
     {
         $init = (new _instalacion(link: $link));
@@ -122,6 +153,22 @@ class instalacion
 
 
         $result->campos_r = $campos_r;
+
+
+        $adm_menu_descripcion = 'Notificaciones';
+        $adm_sistema_descripcion = 'notificaciones';
+        $etiqueta_label = 'Emisores de Correo';
+        $adm_seccion_pertenece_descripcion = 'not_emisor';
+        $adm_namespace_descripcion = 'gamboa.martin/notificaciones';
+        $adm_namespace_name = 'gamboamartin/notificaciones';
+
+        $acl = (new _adm())->integra_acl(adm_menu_descripcion: $adm_menu_descripcion,
+            adm_namespace_name: $adm_namespace_name, adm_namespace_descripcion: $adm_namespace_descripcion,
+            adm_seccion_descripcion: __FUNCTION__, adm_seccion_pertenece_descripcion: $adm_seccion_pertenece_descripcion,
+            adm_sistema_descripcion: $adm_sistema_descripcion, etiqueta_label: $etiqueta_label, link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al obtener acl', data:  $acl);
+        }
 
 
         return $result;
@@ -487,6 +534,11 @@ class instalacion
                 }
 
             }
+        }
+
+        $adm_usuario = $this->adm_usuario(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al ajustar adm_usuario', data:  $adm_usuario);
         }
 
 
