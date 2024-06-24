@@ -9,6 +9,10 @@ use gamboamartin\administrador\models\adm_seccion;
 use gamboamartin\administrador\models\adm_seccion_pertenece;
 use gamboamartin\administrador\models\adm_sistema;
 use gamboamartin\errores\errores;
+use gamboamartin\proceso\models\pr_etapa;
+use gamboamartin\proceso\models\pr_etapa_proceso;
+use gamboamartin\proceso\models\pr_proceso;
+use gamboamartin\proceso\models\pr_tipo_proceso;
 use PDO;
 use stdClass;
 
@@ -211,6 +215,58 @@ class instalacion
         $result->foranenas = $foraneas_r;
         $result->campos = $campos_r;
 
+
+        $adm_menu_descripcion = 'Notificaciones';
+        $adm_sistema_descripcion = 'notificaciones';
+        $etiqueta_label = 'Mensajes';
+        $adm_seccion_pertenece_descripcion = 'not_mensaje';
+        $adm_namespace_descripcion = 'gamboa.martin/notificaciones';
+        $adm_namespace_name = 'gamboamartin/notificaciones';
+
+        $acl = (new _adm())->integra_acl(adm_menu_descripcion: $adm_menu_descripcion,
+            adm_namespace_name: $adm_namespace_name, adm_namespace_descripcion: $adm_namespace_descripcion,
+            adm_seccion_descripcion: __FUNCTION__, adm_seccion_pertenece_descripcion: $adm_seccion_pertenece_descripcion,
+            adm_sistema_descripcion: $adm_sistema_descripcion, etiqueta_label: $etiqueta_label, link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al obtener acl', data:  $acl);
+        }
+
+
+        $alta_accion = (new _adm())->inserta_accion_base(adm_accion_descripcion: 'envia_mensaje',
+            adm_seccion_descripcion:  __FUNCTION__, es_view: 'inactivo', icono: 'bi bi-arrow-up-short',
+            link:  $link, lista:  'activo',titulo:  'Recupera Contraseña');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al insertar accion',data:  $alta_accion);
+        }
+
+        $modelo_pr_etapa_proceso = new pr_etapa_proceso(link: $link);
+        $modelo_pr_etapa = new pr_etapa(link: $link);
+        $modelo_pr_proceso = new pr_proceso(link: $link);
+        $modelo_pr_tipo_proceso = new pr_tipo_proceso(link: $link);
+
+        $inserta = (new _adm())->genera_pr_etapa_proceso(adm_accion_descripcion: 'alta_bd',
+            adm_seccion_descripcion: __FUNCTION__, modelo_pr_etapa: $modelo_pr_etapa,
+            modelo_pr_etapa_proceso: $modelo_pr_etapa_proceso, modelo_pr_proceso: $modelo_pr_proceso,
+            modelo_pr_tipo_proceso: $modelo_pr_tipo_proceso, pr_etapa_codigo: 'ALTA', pr_proceso_codigo: 'NOTIFICACION',
+            pr_tipo_proceso_codigo: 'Control');
+        if (errores::$error) {
+            return (new errores())->error(mensaje: 'Error al insertar rows', data: $inserta);
+        }
+
+        $modelo_pr_etapa_proceso = new pr_etapa_proceso(link: $link);
+        $modelo_pr_etapa = new pr_etapa(link: $link);
+        $modelo_pr_proceso = new pr_proceso(link: $link);
+        $modelo_pr_tipo_proceso = new pr_tipo_proceso(link: $link);
+
+        $inserta = (new _adm())->genera_pr_etapa_proceso(adm_accion_descripcion: 'envia_mensaje',
+            adm_seccion_descripcion: __FUNCTION__, modelo_pr_etapa: $modelo_pr_etapa,
+            modelo_pr_etapa_proceso: $modelo_pr_etapa_proceso, modelo_pr_proceso: $modelo_pr_proceso,
+            modelo_pr_tipo_proceso: $modelo_pr_tipo_proceso, pr_etapa_codigo: 'ENVIADO', pr_proceso_codigo: 'NOTIFICACION',
+            pr_tipo_proceso_codigo: 'Control');
+        if (errores::$error) {
+            return (new errores())->error(mensaje: 'Error al insertar rows', data: $inserta);
+        }
+
         return $result;
 
     }
@@ -252,6 +308,9 @@ class instalacion
         $result = new stdClass();
         $result->foranenas = $foraneas_r;
         $result->campos = $campos_r;
+
+
+
 
         return $result;
 
@@ -309,6 +368,58 @@ class instalacion
 
         $result = new stdClass();
         $result->foranenas = $foraneas_r;
+
+        $adm_menu_descripcion = 'Notificaciones';
+        $adm_sistema_descripcion = 'notificaciones';
+        $etiqueta_label = 'Mensajes';
+        $adm_seccion_pertenece_descripcion = 'not_rel_mensaje';
+        $adm_namespace_descripcion = 'gamboa.martin/notificaciones';
+        $adm_namespace_name = 'gamboamartin/notificaciones';
+
+        $acl = (new _adm())->integra_acl(adm_menu_descripcion: $adm_menu_descripcion,
+            adm_namespace_name: $adm_namespace_name, adm_namespace_descripcion: $adm_namespace_descripcion,
+            adm_seccion_descripcion: __FUNCTION__, adm_seccion_pertenece_descripcion: $adm_seccion_pertenece_descripcion,
+            adm_sistema_descripcion: $adm_sistema_descripcion, etiqueta_label: $etiqueta_label, link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al obtener acl', data:  $acl);
+        }
+
+        $alta_accion = (new _adm())->inserta_accion_base(adm_accion_descripcion: 'envia_mensaje',
+            adm_seccion_descripcion:  __FUNCTION__, es_view: 'inactivo', icono: 'bi bi-arrow-up-short',
+            link:  $link, lista:  'activo',titulo:  'Recupera Contraseña');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al insertar accion',data:  $alta_accion);
+        }
+
+
+        $modelo_pr_etapa_proceso = new pr_etapa_proceso(link: $link);
+        $modelo_pr_etapa = new pr_etapa(link: $link);
+        $modelo_pr_proceso = new pr_proceso(link: $link);
+        $modelo_pr_tipo_proceso = new pr_tipo_proceso(link: $link);
+
+        $inserta = (new _adm())->genera_pr_etapa_proceso(adm_accion_descripcion: 'alta_bd',
+            adm_seccion_descripcion: __FUNCTION__, modelo_pr_etapa: $modelo_pr_etapa,
+            modelo_pr_etapa_proceso: $modelo_pr_etapa_proceso, modelo_pr_proceso: $modelo_pr_proceso,
+            modelo_pr_tipo_proceso: $modelo_pr_tipo_proceso, pr_etapa_codigo: 'ALTA', pr_proceso_codigo: 'NOTIFICACION',
+            pr_tipo_proceso_codigo: 'Control');
+        if (errores::$error) {
+            return (new errores())->error(mensaje: 'Error al insertar rows', data: $inserta);
+        }
+
+
+        $modelo_pr_etapa_proceso = new pr_etapa_proceso(link: $link);
+        $modelo_pr_etapa = new pr_etapa(link: $link);
+        $modelo_pr_proceso = new pr_proceso(link: $link);
+        $modelo_pr_tipo_proceso = new pr_tipo_proceso(link: $link);
+
+        $inserta = (new _adm())->genera_pr_etapa_proceso(adm_accion_descripcion: 'envia_mensaje',
+            adm_seccion_descripcion: __FUNCTION__, modelo_pr_etapa: $modelo_pr_etapa,
+            modelo_pr_etapa_proceso: $modelo_pr_etapa_proceso, modelo_pr_proceso: $modelo_pr_proceso,
+            modelo_pr_tipo_proceso: $modelo_pr_tipo_proceso, pr_etapa_codigo: 'ENVIADO', pr_proceso_codigo: 'NOTIFICACION',
+            pr_tipo_proceso_codigo: 'Control');
+        if (errores::$error) {
+            return (new errores())->error(mensaje: 'Error al insertar rows', data: $inserta);
+        }
 
 
         return $result;

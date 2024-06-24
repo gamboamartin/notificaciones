@@ -58,14 +58,16 @@ class controlador_not_mensaje extends _ctl_parent_sin_codigo {
 
         $this->inputs->asunto = $asunto;
 
-        $mensaje = (new not_mensaje_html(html: $this->html_base))->input_mensaje(cols: 12, row_upd: new stdClass(), value_vacio: false);
+        $mensaje = (new not_mensaje_html(html: $this->html_base))->input_mensaje(
+            cols: 12, row_upd: new stdClass(), value_vacio: false);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al generar input',data:  $mensaje, header: $header,ws:  $ws);
         }
 
         $this->inputs->mensaje = $mensaje;
 
-        $not_emisor_id = (new not_emisor_html(html: $this->html_base))->select_not_emisor_id(cols: 12,con_registros: true,id_selected: -1,link:  $this->link);
+        $not_emisor_id = (new not_emisor_html(html: $this->html_base))->select_not_emisor_id(
+            cols: 12,con_registros: true,id_selected: -1,link:  $this->link);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al generar input',data:  $not_emisor_id, header: $header,ws:  $ws);
         }

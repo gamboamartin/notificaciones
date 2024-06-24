@@ -1,5 +1,6 @@
 <?php
 namespace gamboamartin\notificaciones\mail;
+use gamboamartin\errores\errores;
 use PHPMailer\PHPMailer\PHPMailer;
 use stdClass;
 use Throwable;
@@ -9,9 +10,11 @@ class _mail{
      * Envia un correo con adjuntos
      * @param stdClass $mensaje
      * @param array $adjuntos
-     * @return PHPMailer|void
+     * @return array|PHPMailer
      */
-    final public function envia(stdClass $mensaje, array $adjuntos = array()){
+    final public function envia(stdClass $mensaje, array $adjuntos = array()): array|PHPMailer
+    {
+
         try {
 
             $mail = new PHPMailer (true);
@@ -41,8 +44,7 @@ class _mail{
 
 
         } catch (Throwable $e) {
-            echo "Mailer Error: ".$e;
-            exit;
+            return (new errores())->error(mensaje: 'Error al enviar mensaje',data: $e,es_final: true);
         }
         return $mail;
     }

@@ -10,6 +10,10 @@ namespace gamboamartin\notificaciones\controllers;
 use gamboamartin\administrador\models\adm_usuario;
 use gamboamartin\errores\errores;
 use gamboamartin\notificaciones\models\not_emisor;
+use gamboamartin\notificaciones\models\not_mensaje;
+use gamboamartin\notificaciones\models\not_receptor;
+use gamboamartin\notificaciones\models\not_rel_mensaje;
+use gamboamartin\system\actions;
 
 class controlador_adm_usuario extends \gamboamartin\acl\controllers\controlador_adm_usuario {
     final public function recupera_contrasena(bool $header, bool $ws = false)
@@ -21,22 +25,106 @@ class controlador_adm_usuario extends \gamboamartin\acl\controllers\controlador_
                 mensaje: 'Error al obtener usuario',data:  $adm_usuario, header: $header,ws:  $ws);
         }
 
-        $not_emisores = (new not_emisor(link: $this->link))->registros_activos();
+
+        $id_retorno = -1;
+        if(isset($_POST['id_retorno'])){
+            $id_retorno = $_POST['id_retorno'];
+            unset($_POST['id_retorno']);
+        }
+        $seccion_retorno = $this->tabla;
+        if(isset($_POST['seccion_retorno'])){
+            $seccion_retorno = $_POST['seccion_retorno'];
+            unset($_POST['seccion_retorno']);
+        }
+        $siguiente_view = (new actions())->init_alta_bd();
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener emisores',data:  $not_emisores, header: $header,ws:  $ws);
-        }
-        if(count($not_emisores) === 0){
-            return $this->retorno_error(mensaje: 'Error no existen emisores',data:  $not_emisores, header: $header,ws:  $ws);
+            return $this->retorno_error(mensaje: 'Error al obtener siguiente view', data: $siguiente_view,
+                header:  $header, ws: $ws);
         }
 
-        print_r($not_emisores);exit;
 
-        $not_mensaje_ins = array();
-        //$not_mensaje_ins['']
 
         $email = $adm_usuario->email;
         $usuario = $adm_usuario->user;
         $password = $adm_usuario->password;
+
+
+        $filtro_rec['not_receptor.email'] = $email;
+        $existe = (new not_receptor(link: $this->link))->existe(filtro: $filtro_rec);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al validar receptor',data:  $existe, header: $header,ws:  $ws);
+        }
+
+        if($existe){
+            $not_receptor_id = (new not_receptor(link: $this->link))->not_receptor_id_by_email(email: $email);
+            if(errores::$error){
+                return $this->retorno_error(mensaje: 'Error obtener not_receptor_id',data:  $not_receptor_id,
+                    header: $header,ws:  $ws);
+            }
+        }
+        else{
+            $not_receptor_ins['email'] = $email;
+            $r_not_receptor = (new not_receptor(link: $this->link))->alta_registro(registro: $not_receptor_ins);
+            if(errores::$error){
+                return $this->retorno_error(mensaje: 'Error obtener r_not_receptor',data:  $r_not_receptor,
+                    header: $header,ws:  $ws);
+            }
+            $not_receptor_id = $r_not_receptor->registro_id;
+        }
+
+        $not_emisores = (new not_emisor(link: $this->link))->registros_activos();
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener emisores',data:  $not_emisores, header: $header,ws:  $ws);
+        }
+
+        $n_emisores = count($not_emisores);
+
+        if($n_emisores === 0){
+            return $this->retorno_error(mensaje: 'Error no existen emisores',data:  $not_emisores, header: $header,ws:  $ws);
+        }
+
+        $emisor_selected = mt_rand(0,$n_emisores-1);
+        $not_emisor = (object)$not_emisores[$emisor_selected];
+
+
+        $not_mensaje_ins = array();
+        $not_mensaje_ins['not_emisor_id'] = $not_emisor->not_emisor_id;
+        $not_mensaje_ins['asunto'] = 'Recuperacion de contraseña';
+        $not_mensaje_ins['mensaje'] = 'Tu usuario es: <b> '.$usuario.' </b><br>';
+        $not_mensaje_ins['mensaje'] .= 'Tu password es: <b> '.$password.' </b><br>';
+
+        $not_mensaje = (new not_mensaje(link: $this->link))->alta_registro(registro: $not_mensaje_ins);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al insertar mensaje',data:  $not_mensaje, header: $header,ws:  $ws);
+        }
+
+
+        $not_rel_mensaje_ins = array();
+        $not_rel_mensaje_ins['not_mensaje_id'] = $not_mensaje->registro_id;
+        $not_rel_mensaje_ins['not_receptor_id'] = $not_receptor_id;
+
+        $r_not_rel_mensaje = (new not_rel_mensaje(link: $this->link))->alta_registro(registro: $not_rel_mensaje_ins);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al insertar r_not_rel_mensaje',data:  $r_not_rel_mensaje, header: $header,ws:  $ws);
+        }
+
+
+        $envia_mensaje = (new not_mensaje(link: $this->link))->envia_mensaje(not_mensaje_id: $not_mensaje->registro_id);
+        if(errores::$error){
+
+            return $this->retorno_error(mensaje: 'Error al enviar mensaje',data:  $envia_mensaje, header: $header,ws:  $ws);
+        }
+        $envia_mensaje = (object)$envia_mensaje;
+
+        $out = $this->out_alta(header: $header,id_retorno:  $id_retorno,r_alta_bd:  $envia_mensaje,
+            seccion_retorno:  $seccion_retorno,siguiente_view:  $siguiente_view,ws:  $ws);
+        if(errores::$error){
+            print_r($out);
+            die('Error');
+        }
+
+        $envia_mensaje->siguiente_view = $siguiente_view;
+        return $envia_mensaje;
 
 
 
