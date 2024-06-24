@@ -16,6 +16,7 @@ use gamboamartin\notificaciones\models\not_rel_mensaje;
 use gamboamartin\system\actions;
 
 class controlador_adm_usuario extends \gamboamartin\acl\controllers\controlador_adm_usuario {
+
     final public function recupera_contrasena(bool $header, bool $ws = false)
     {
         $adm_usuario = (new adm_usuario(link: $this->link))->registro(registro_id: $this->registro_id,
@@ -24,24 +25,6 @@ class controlador_adm_usuario extends \gamboamartin\acl\controllers\controlador_
             return $this->retorno_error(
                 mensaje: 'Error al obtener usuario',data:  $adm_usuario, header: $header,ws:  $ws);
         }
-
-
-        $id_retorno = -1;
-        if(isset($_POST['id_retorno'])){
-            $id_retorno = $_POST['id_retorno'];
-            unset($_POST['id_retorno']);
-        }
-        $seccion_retorno = $this->tabla;
-        if(isset($_POST['seccion_retorno'])){
-            $seccion_retorno = $_POST['seccion_retorno'];
-            unset($_POST['seccion_retorno']);
-        }
-        $siguiente_view = (new actions())->init_alta_bd();
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener siguiente view', data: $siguiente_view,
-                header:  $header, ws: $ws);
-        }
-
 
 
         $email = $adm_usuario->email;
@@ -115,19 +98,15 @@ class controlador_adm_usuario extends \gamboamartin\acl\controllers\controlador_
             return $this->retorno_error(mensaje: 'Error al enviar mensaje',data:  $envia_mensaje, header: $header,ws:  $ws);
         }
         $envia_mensaje = (object)$envia_mensaje;
+        $envia_mensaje->id_retorno = -1;
 
-        $out = $this->out_alta(header: $header,id_retorno:  $id_retorno,r_alta_bd:  $envia_mensaje,
-            seccion_retorno:  $seccion_retorno,siguiente_view:  $siguiente_view,ws:  $ws);
+        $out = $this->retorno_base(registro_id: $this->registro_id, result: $envia_mensaje, siguiente_view: 'lista', ws: $ws);
         if(errores::$error){
             print_r($out);
             die('Error');
         }
 
-        $envia_mensaje->siguiente_view = $siguiente_view;
         return $envia_mensaje;
-
-
-
 
     }
 }
