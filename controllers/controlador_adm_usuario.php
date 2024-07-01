@@ -7,6 +7,7 @@
  *
  */
 namespace gamboamartin\notificaciones\controllers;
+use config\generales;
 use gamboamartin\administrador\models\adm_usuario;
 use gamboamartin\errores\errores;
 use gamboamartin\notificaciones\models\not_emisor;
@@ -69,11 +70,14 @@ class controlador_adm_usuario extends \gamboamartin\acl\controllers\controlador_
         $emisor_selected = mt_rand(0,$n_emisores-1);
         $not_emisor = (object)$not_emisores[$emisor_selected];
 
+        $liga = (new generales())->url_base;
+        $link_sistema = "<a href = '$liga'><b>Accesa desde aqui</b></a>";
 
         $not_mensaje_ins = array();
         $not_mensaje_ins['not_emisor_id'] = $not_emisor->not_emisor_id;
         $not_mensaje_ins['asunto'] = 'Recuperacion de contraseña';
-        $not_mensaje_ins['mensaje'] = 'Tu usuario es: <b> '.$usuario.' </b><br>';
+        $not_mensaje_ins['mensaje'] = 'La ruta de acceso es : <b> '.$link_sistema.'</b><br>';
+        $not_mensaje_ins['mensaje'] .= 'Tu usuario es: <b> '.$usuario.' </b><br>';
         $not_mensaje_ins['mensaje'] .= 'Tu password es: <b> '.$password.' </b><br>';
 
         $not_mensaje = (new not_mensaje(link: $this->link))->alta_registro(registro: $not_mensaje_ins);
