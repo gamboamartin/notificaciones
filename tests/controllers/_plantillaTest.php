@@ -51,7 +51,7 @@ class _plantillaTest extends test {
         $resultado = $obj->accesos_html($link_acceso, $password, $usuario);
         $this->assertIsString($resultado);
         $this->assertNotTrue(errores::$error);
-        $this->assertEquals("<p><b><a href='a'>Acceso</a></b></p><p>Usuario: c</p><p>Password: b</p>",$resultado);
+        $this->assertEquals("<p><b>a</b></p><p>Usuario: c</p><p>Password: b</p>",$resultado);
 
 
         errores::$error = false;

@@ -37,8 +37,8 @@ class _plantilla{
         if($password === ''){
             return (new errores())->error('Error al generar password',data: $password);
         }
-        $link_acceso = "'$link_acceso'";
-        $el_a = "<p><b><a href=".$link_acceso.">Acceso</a></b></p>";
+
+        $el_a = "<p><b>$link_acceso</b></p>";
         $el_user = "<p>Usuario: $usuario</p>";
         $el_pass = "<p>Password: $password</p>";
         return $el_a.$el_user.$el_pass;
