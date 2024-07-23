@@ -129,7 +129,7 @@ class _plantilla{
 
     private function pie(string $dom_comercial, string $link_web_oficial, string $nombre_comercial): string
     {
-        return "Quedamos a su disposicion para cualquier duda o aclaracion.<br> $dom_comercial<br> $link_web_oficial<br>";
+        return "Quedamos a su disposicion para cualquier duda o aclaracion. <br> $dom_comercial <br> $link_web_oficial <br>$nombre_comercial";
 
     }
 
