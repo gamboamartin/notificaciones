@@ -62,9 +62,9 @@ class _plantilla{
         }
 
         $html = new stdClass();
-        $html->pie = utf8_decode($pie);
+        $html->pie = html_entity_decode($pie);
         $html->estilo = $estilo;
-        $html->accesos = utf8_decode($accesos);
+        $html->accesos = html_entity_decode($accesos);
 
         return $html;
 
