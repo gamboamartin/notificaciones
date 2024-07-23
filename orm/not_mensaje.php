@@ -48,6 +48,12 @@ class not_mensaje extends _modelo_parent_sin_codigo {
             return $this->error->error(mensaje: 'Error al validar $emisor',data: $valida);
         }
 
+        $keys = array('asunto');
+        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $this->registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar $emisor',data: $valida);
+        }
+
         $not_emisor = (new not_emisor(link: $this->link))->registro(registro_id: $this->registro['not_emisor_id']);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener emisor',data: $not_emisor);
