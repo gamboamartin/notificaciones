@@ -99,6 +99,7 @@ class controlador_adm_usuario extends \gamboamartin\acl\controllers\controlador_
 
         $not_mensaje_ins['mensaje'] = $mensaje;
         $not_mensaje_ins['not_emisor_id'] = $not_emisor->not_emisor_id;
+        $not_mensaje_ins['asunto'] = 'Recuperacion de contraseña (No Reply)';
 
         $not_mensaje = (new not_mensaje(link: $this->link))->alta_registro(registro: $not_mensaje_ins);
         if(errores::$error){
