@@ -6,7 +6,7 @@ use stdClass;
 
 class _plantilla{
     final public function accesos(string $dom_comercial, string $link_acceso, string $link_web_oficial,
-                                  string $nombre_comercial, string $nombre_completo, string $password, string $usuario)
+                                  string $nombre_comercial, string $nombre_completo, string $password, string $usuario): array|string
     {
 
 
@@ -15,22 +15,33 @@ class _plantilla{
             return (new errores())->error('Error al generar base',data: $base);
         }
 
-        $html = "<p>Buen día <b>$nombre_completo</b>: </p>
+        return "<p>Buen día <b>$nombre_completo</b>: </p>
                     <p>Estos son tus accesos:</p>
                     $base->accesos
                     $base->pie
                     $base->estilo";
-
-        return $html;
         
     }
 
-    private function accesos_html(string $link_acceso, string $password, string $usuario): string
+    private function accesos_html(string $link_acceso, string $password, string $usuario): string|array
     {
-        return "<p><b><a href='$link_acceso'>Acceso</a></b></p>
-                    <p>Usuario: $usuario</p>
-                    <p>Password: $password</p>";
-
+        $link_acceso = trim($link_acceso);
+        if($link_acceso === ''){
+            return (new errores())->error('Error al generar link_acceso',data: $link_acceso);
+        }
+        $usuario = trim($usuario);
+        if($usuario === ''){
+            return (new errores())->error('Error al generar usuario',data: $usuario);
+        }
+        $password = trim($password);
+        if($password === ''){
+            return (new errores())->error('Error al generar password',data: $password);
+        }
+        $link_acceso = "'$link_acceso'";
+        $el_a = "<p><b><a href=".$link_acceso.">Acceso</a></b></p>";
+        $el_user = "<p>Usuario: $usuario</p>";
+        $el_pass = "<p>Password: $password</p>";
+        return $el_a.$el_user.$el_pass;
     }
 
     private function base_correo_acceso(string $dom_comercial, string $link_acceso, string $link_web_oficial,
