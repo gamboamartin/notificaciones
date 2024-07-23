@@ -39,8 +39,8 @@ class _plantilla{
         }
 
         $el_a = "<p><b>$link_acceso</b></p>";
-        $el_user = "<p>Usuario: $usuario</p>";
-        $el_pass = "<p>Password: $password</p>";
+        $el_user = "Usuario: $usuario";
+        $el_pass = "Password: $password";
         return $el_a.$el_user.$el_pass;
     }
 
