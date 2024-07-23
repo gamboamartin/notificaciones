@@ -41,5 +41,22 @@ class not_emisor extends _modelo_parent_sin_codigo {
         return $r_alta_bd;
     }
 
+    final public function not_emisor_selected()
+    {
+        $not_emisores = $this->registros_activos();
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener emisores',data:  $not_emisores);
+        }
+
+        $n_emisores = count($not_emisores);
+
+        if($n_emisores === 0){
+            return $this->error->error(mensaje: 'Error no existen emisores',data:  $not_emisores);
+        }
+        $emisor_selected = mt_rand(0,$n_emisores-1);
+        return (object)$not_emisores[$emisor_selected];
+
+    }
+
 
 }

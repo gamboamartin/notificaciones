@@ -78,7 +78,33 @@ class not_receptor extends _modelo_parent_sin_codigo {
         return $r_alta_bd;
     }
 
-    final public function not_receptor_id_by_email(string $email)
+    final public function not_receptor_id(string $email)
+    {
+        $filtro_rec['not_receptor.email'] = $email;
+        $existe = $this->existe(filtro: $filtro_rec);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar receptor',data:  $existe);
+        }
+
+        if($existe){
+            $not_receptor_id = $this->not_receptor_id_by_email(email: $email);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error obtener not_receptor_id',data:  $not_receptor_id);
+            }
+        }
+        else{
+            $not_receptor_ins['email'] = $email;
+            $r_not_receptor = $this->alta_registro(registro: $not_receptor_ins);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error obtener r_not_receptor',data:  $r_not_receptor);
+            }
+            $not_receptor_id = $r_not_receptor->registro_id;
+        }
+        return $not_receptor_id;
+
+    }
+
+    private function not_receptor_id_by_email(string $email)
     {
         $filtro['not_receptor.email'] = $email;
 
