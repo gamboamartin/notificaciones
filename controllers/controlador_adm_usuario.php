@@ -83,14 +83,24 @@ class controlador_adm_usuario extends \gamboamartin\acl\controllers\controlador_
         $emisor_selected = mt_rand(0,$n_emisores-1);
         $not_emisor = (object)$not_emisores[$emisor_selected];
 
-        $liga = (new generales())->url_base;
+        $generales = new generales();
+        $liga = $generales->url_base;
         $link_sistema = "<a href = '$liga'><b>Accesa desde aqui</b></a>";
 
 
         $dom_comercial = '';
+        if(isset($generales->dom_comercial)){
+            $dom_comercial = $generales->dom_comercial;
+        }
         $link_web_oficial = '';
+        if(isset($generales->link_web_oficial)){
+            $link_web_oficial = $generales->link_web_oficial;
+        }
         $nombre_comercial = '';
-        $nombre_completo = '';
+        if(isset($generales->nombre_comercial)){
+            $nombre_comercial = $generales->nombre_comercial;
+        }
+        $nombre_completo = $adm_usuario->nombre.' '.$adm_usuario->ap.' '.$adm_usuario->am;
         $mensaje = $this->mensaje_accesos($dom_comercial, $link_sistema, $link_web_oficial, $nombre_comercial,
             $nombre_completo, $password, $usuario);
         if(errores::$error){
