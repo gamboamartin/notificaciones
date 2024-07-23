@@ -62,9 +62,9 @@ class _plantilla{
         }
 
         $html = new stdClass();
-        $html->pie = $pie;
+        $html->pie = utf8_decode($pie);
         $html->estilo = $estilo;
-        $html->accesos = $accesos;
+        $html->accesos = utf8_decode($accesos);
 
         return $html;
 
@@ -134,7 +134,7 @@ class _plantilla{
     private function pie(string $dom_comercial, string $link_web_oficial, string $nombre_comercial): string
     {
         return "<p>Quedamos a su disposición para cualquier duda o aclaración. </p>
-                    <p class='pie'>$dom_comercial <a href='$link_web_oficial'>$nombre_comercial</a></p>";
+                    <p class='pie'>$dom_comercial $link_web_oficial</p>";
 
     }
 
