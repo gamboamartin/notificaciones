@@ -38,9 +38,9 @@ class _plantilla{
             return (new errores())->error('Error al generar password',data: $password);
         }
 
-        $el_a = "<p><b>$link_acceso</b></p>";
-        $el_user = "Usuario: $usuario";
-        $el_pass = "Password: $password";
+        $el_a = "<br><b>$link_acceso</b><br>";
+        $el_user = "<br><b>Usuario:</b> $usuario<br>";
+        $el_pass = "<br><b>Password:</b> $password<br>";
         return $el_a.$el_user.$el_pass;
     }
 
@@ -62,9 +62,9 @@ class _plantilla{
         }
 
         $html = new stdClass();
-        $html->pie = html_entity_decode($pie);
+        $html->pie = $pie;
         $html->estilo = $estilo;
-        $html->accesos = html_entity_decode($accesos);
+        $html->accesos = $accesos;
 
         return $html;
 
@@ -133,8 +133,7 @@ class _plantilla{
 
     private function pie(string $dom_comercial, string $link_web_oficial, string $nombre_comercial): string
     {
-        return "<p>Quedamos a su disposición para cualquier duda o aclaración. </p>
-                    <p class='pie'>$dom_comercial $link_web_oficial</p>";
+        return "Quedamos a su disposicion para cualquier duda o aclaración.<br> $dom_comercial<br> $link_web_oficial<br>";
 
     }
 
