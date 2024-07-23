@@ -49,7 +49,7 @@ class not_mensaje extends _modelo_parent_sin_codigo {
         }
 
         $keys = array('asunto');
-        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $this->registro);
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $this->registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar $emisor',data: $valida);
         }
