@@ -15,11 +15,7 @@ class _plantilla{
             return (new errores())->error('Error al generar base',data: $base);
         }
 
-        return "<p>Buen día <b>$nombre_completo</b>: </p>
-                    <p>Estos son tus accesos:</p>
-                    $base->accesos
-                    $base->pie
-                    $base->estilo";
+        return "Buen día <b>$nombre_completo</b>: Estos son tus accesos: <br>$base->accesos<br> $base->pie<br> $base->estilo";
         
     }
 
@@ -133,7 +129,7 @@ class _plantilla{
 
     private function pie(string $dom_comercial, string $link_web_oficial, string $nombre_comercial): string
     {
-        return "Quedamos a su disposicion para cualquier duda o aclaración.<br> $dom_comercial<br> $link_web_oficial<br>";
+        return "Quedamos a su disposicion para cualquier duda o aclaracion.<br> $dom_comercial<br> $link_web_oficial<br>";
 
     }
 
