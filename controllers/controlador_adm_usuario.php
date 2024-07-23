@@ -100,8 +100,9 @@ class controlador_adm_usuario extends \gamboamartin\acl\controllers\controlador_
             $nombre_comercial = $generales->nombre_comercial;
         }
         $nombre_completo = $adm_usuario->nombre.' '.$adm_usuario->ap.' '.$adm_usuario->am;
-        $mensaje = $this->mensaje_accesos($dom_comercial, $link_sistema, $link_web_oficial, $nombre_comercial,
-            $nombre_completo, $password, $usuario);
+        $mensaje = $this->mensaje_accesos(dom_comercial: $dom_comercial,link_sistema:  $link_sistema,
+            link_web_oficial:  $link_web_oficial,nombre_comercial:  $nombre_comercial,
+            nombre_completo: $nombre_completo,password:  $password,usuario:  $usuario);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar mensaje',data:  $mensaje, header: $header,ws:  $ws);
         }

@@ -53,7 +53,6 @@ class _plantillaTest extends test {
         $this->assertNotTrue(errores::$error);
         $this->assertEquals("<p><b>a</b></p><p>Usuario: c</p><p>Password: b</p>",$resultado);
 
-
         errores::$error = false;
     }
 
