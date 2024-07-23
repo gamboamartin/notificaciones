@@ -14,10 +14,23 @@ use gamboamartin\notificaciones\models\not_emisor;
 use gamboamartin\notificaciones\models\not_mensaje;
 use gamboamartin\notificaciones\models\not_receptor;
 use gamboamartin\notificaciones\models\not_rel_mensaje;
-use gamboamartin\system\actions;
 
 class controlador_adm_usuario extends \gamboamartin\acl\controllers\controlador_adm_usuario {
 
+    private function mensaje_accesos(string $dom_comercial, string $link_sistema, string $link_web_oficial, $nombre_comercial,
+                             string $nombre_completo, string $password, string $usuario): array|string
+    {
+
+        $mensaje_html = (new _plantilla())->accesos($dom_comercial, $link_sistema, $link_web_oficial, $nombre_comercial,
+            $nombre_completo, $password, $usuario);
+
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar mensaje',data:  $mensaje_html);
+        }
+
+        return $mensaje_html;
+
+    }
     final public function recupera_contrasena(bool $header, bool $ws = false)
     {
         $adm_usuario = (new adm_usuario(link: $this->link))->registro(registro_id: $this->registro_id,
@@ -73,12 +86,18 @@ class controlador_adm_usuario extends \gamboamartin\acl\controllers\controlador_
         $liga = (new generales())->url_base;
         $link_sistema = "<a href = '$liga'><b>Accesa desde aqui</b></a>";
 
-        $not_mensaje_ins = array();
-        $not_mensaje_ins['not_emisor_id'] = $not_emisor->not_emisor_id;
-        $not_mensaje_ins['asunto'] = 'Recuperacion de contraseña';
-        $not_mensaje_ins['mensaje'] = 'La ruta de acceso es : <b> '.$link_sistema.'</b><br>';
-        $not_mensaje_ins['mensaje'] .= 'Tu usuario es: <b> '.$usuario.' </b><br>';
-        $not_mensaje_ins['mensaje'] .= 'Tu password es: <b> '.$password.' </b><br>';
+
+        $dom_comercial = '';
+        $link_web_oficial = '';
+        $nombre_comercial = '';
+        $nombre_completo = '';
+        $mensaje = $this->mensaje_accesos($dom_comercial, $link_sistema, $link_web_oficial, $nombre_comercial,
+            $nombre_completo, $password, $usuario);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar mensaje',data:  $mensaje, header: $header,ws:  $ws);
+        }
+
+        $not_mensaje_ins['mensaje'] = $mensaje;
 
         $not_mensaje = (new not_mensaje(link: $this->link))->alta_registro(registro: $not_mensaje_ins);
         if(errores::$error){
