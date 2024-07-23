@@ -85,8 +85,7 @@ class controlador_adm_usuario extends \gamboamartin\acl\controllers\controlador_
 
         $generales = new generales();
         $liga = $generales->url_base;
-        $link_sistema = "<a href = '$liga'><b>Accesa desde aqui</b></a>";
-
+        $link_sistema = "<b>$liga</b>";
 
         $dom_comercial = '';
         if(isset($generales->dom_comercial)){
