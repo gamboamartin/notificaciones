@@ -10,9 +10,11 @@ class _mail{
      * Envia un correo con adjuntos
      * @param stdClass $mensaje
      * @param array $adjuntos
+     * @param array $cc
+     * @param array $cco
      * @return array|PHPMailer
      */
-    final public function envia(stdClass $mensaje, array $adjuntos = array()): array|PHPMailer
+    final public function envia(stdClass $mensaje, array $adjuntos = array(), array $cc = array(), array $cco = array()): array|PHPMailer
     {
 
         try {
@@ -37,6 +39,18 @@ class _mail{
                 $path =  $adjunto['doc_documento_ruta_absoluta'];
                 $name =  $adjunto['not_adjunto_name_out'];
                 $mail->AddAttachment($path, $name);
+            }
+
+            if (count($cc) > 0) {
+                foreach ($cc as $c) {
+                    $mail->addCC($c);
+                }
+            }
+
+            if (count($cco) > 0) {
+                foreach ($cco as $c) {
+                    $mail->addBCC($c);
+                }
             }
 
             $mail->send();

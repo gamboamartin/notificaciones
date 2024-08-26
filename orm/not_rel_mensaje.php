@@ -73,7 +73,7 @@ class not_rel_mensaje extends _modelo_parent_sin_codigo {
         return $r_alta_bd;
     }
 
-    final public function envia_mensaje(int $not_rel_mensaje_id){
+    final public function envia_mensaje(int $not_rel_mensaje_id, array $cc = array(), array $cco = array()){
         $not_rel_mensaje = $this->registro(registro_id: $not_rel_mensaje_id, retorno_obj: true);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener mensaje',data:  $not_rel_mensaje);
@@ -95,7 +95,7 @@ class not_rel_mensaje extends _modelo_parent_sin_codigo {
 
         $adjuntos = $r_not_adjunto->registros;
 
-        $mail = (new _mail())->envia(mensaje: $not_rel_mensaje, adjuntos: $adjuntos);
+        $mail = (new _mail())->envia(mensaje: $not_rel_mensaje, adjuntos: $adjuntos,cc: $cc, cco: $cco);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al enviar mensaje',data:  $mail);
         }

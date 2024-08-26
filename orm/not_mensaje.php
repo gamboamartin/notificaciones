@@ -78,7 +78,7 @@ class not_mensaje extends _modelo_parent_sin_codigo {
     }
 
 
-    final public function envia_mensaje(int $not_mensaje_id){
+    final public function envia_mensaje(int $not_mensaje_id, array $cc = array(), array $cco = array()){
         $not_mensaje = $this->registro(registro_id: $not_mensaje_id, retorno_obj: true);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener mensaje',data:  $not_mensaje);
@@ -103,7 +103,8 @@ class not_mensaje extends _modelo_parent_sin_codigo {
              * REFACTORIZAR CON ATTR EN DATABASE
              */
             if($not_rel_mensaje['not_rel_mensaje_etapa'] === 'ALTA'){
-                $mail = (new not_rel_mensaje(link: $this->link))->envia_mensaje($not_rel_mensaje['not_rel_mensaje_id']);
+                $mail = (new not_rel_mensaje(link: $this->link))->envia_mensaje($not_rel_mensaje['not_rel_mensaje_id'],
+                    cc: $cc, cco: $cco);
                 if(errores::$error){
                     return $this->error->error(mensaje: 'Error al enviar mensaje',data:  $mail);
                 }
